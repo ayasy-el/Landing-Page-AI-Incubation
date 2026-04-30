@@ -15,9 +15,17 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+    ></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   </head>
   <body>
-    <canvas id="flow-canvas" aria-hidden="true"></canvas>
+    <canvas id="three-canvas" aria-hidden="true"></canvas>
     <div class="noise" aria-hidden="true"></div>
 
     <header class="site-header">
@@ -52,33 +60,137 @@
             <span><strong>Decision</strong></span>
           </h1>
           <p class="hero-copy">
-            Harmonize metadata, indicators, and data definitions across ministries,
-            agencies, and local governments.
+            Harmonize metadata, indicators, and data definitions across ministries, agencies, and
+            local governments.
           </p>
           <div class="hero-actions">
             <a class="button button-primary" href="#platform">Explore platform</a>
             <a class="button button-secondary" href="#workflow">See workflow</a>
           </div>
+          <div class="hero-showcase" aria-label="Metagraph platform preview">
+            <div class="hero-showcase-glow"></div>
+            <div class="hero-showcase-shell">
+              <img src="demo.png" alt="Metagraph platform dashboard preview" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section feature-bento">
+        <div class="section-copy reveal">
+          <p class="kicker">Core product features</p>
+          <h2>
+            One workspace for <strong>integration</strong>, <strong>reasoning</strong>, and review
+          </h2>
+          <p class="section-lede">
+            Metagraph combines automated data transformation, connector orchestration, knowledge
+            graph mapping, and multi-agent review in a single harmonization workflow.
+          </p>
+        </div>
+        <div class="bento-grid reveal" aria-label="Metagraph feature showcase">
+          <article class="bento-card bento-card-wide bento-card-overlay">
+            <div class="bento-media">
+              <img
+                src="auto data transformation.png"
+                alt="Auto data transformation feature preview"
+              />
+            </div>
+            <div class="bento-copy">
+              <span class="bento-tag">01</span>
+              <h3>Auto Data Transformation</h3>
+              <p>
+                Normalize raw institutional data into harmonized structures with less manual prep.
+              </p>
+            </div>
+          </article>
+          <article class="bento-card bento-card-tall bento-card-stack">
+            <div class="bento-media">
+              <img
+                src="connector data integrator.png"
+                alt="Connector data integrator feature preview"
+              />
+            </div>
+            <div class="bento-copy">
+              <span class="bento-tag">02</span>
+              <h3>Connector Data Integrator</h3>
+              <p>
+                Link spreadsheets, APIs, and operational systems into one governed ingestion layer.
+              </p>
+            </div>
+          </article>
+          <article class="bento-card bento-card-knowledge bento-card-overlay">
+            <div class="bento-media">
+              <img src="knowledge graph.png" alt="Knowledge graph feature preview" />
+            </div>
+            <div class="bento-copy">
+              <span class="bento-tag">03</span>
+              <h3>Knowledge Graph</h3>
+              <p>Map entities, indicators, and definitions into a shared semantic backbone.</p>
+            </div>
+          </article>
+          <article class="bento-card bento-card-debate bento-card-overlay">
+            <div class="bento-media">
+              <img src="multi agent debate.png" alt="Multi agent debate feature preview" />
+            </div>
+            <div class="bento-copy">
+              <span class="bento-tag">04</span>
+              <h3>Multi Agent Debate</h3>
+              <p>
+                Run parallel reasoning paths to surface conflicts, alternatives, and review-ready
+                recommendations.
+              </p>
+            </div>
+          </article>
         </div>
       </section>
 
       <section class="section split" id="gap">
         <div class="section-copy reveal">
           <p class="kicker">The harmonization gap</p>
-          <h2>The challenge is not collecting more data. It is <strong>aligning meaning</strong> across institutions.</h2>
+          <h2 class="gap-title">
+            <span>The</span>
+            <strong>Harmonization Gap</strong>
+            <span>in Public Sector Data</span>
+          </h2>
+          <p class="section-lede">
+            The core issue is not a lack of data, but the absence of shared meaning behind it.
+            Public-sector data faces critical fragmentation challenges across institutions.
+          </p>
         </div>
         <div class="gap-grid reveal">
           <article class="signal-card">
+            <div class="svg-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2Z" />
+                <path d="M14 2v6h6" />
+                <path d="M8 13h8M8 17h8M8 9h2" />
+              </svg>
+            </div>
             <span class="card-index">01</span>
             <h3>Fragmented Sources</h3>
             <p>Metadata lives across documents, spreadsheets, reports, and legacy systems.</p>
           </article>
           <article class="signal-card">
+            <div class="svg-icon warning">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
+                />
+                <path d="M12 9v4M12 17h.01" />
+              </svg>
+            </div>
             <span class="card-index">02</span>
             <h3>Inconsistent Meaning</h3>
             <p>Definitions, units, and methodologies vary between institutions.</p>
           </article>
           <article class="signal-card">
+            <div class="svg-icon cyan">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.7-3.8a6 6 0 0 1-7.9 8l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 8-7.9l-3.8 3.7Z"
+                />
+              </svg>
+            </div>
             <span class="card-index">03</span>
             <h3>Manual Processes</h3>
             <p>Harmonization requires slow, multi-layer coordination.</p>
@@ -88,22 +200,46 @@
 
       <section class="section ai-limits">
         <div class="section-copy centered reveal">
-          <p class="kicker">Why existing AI falls short</p>
-          <h2>AI can <em>read data</em>, but reading data is not the same as <strong>aligning it</strong>.</h2>
+          <p class="kicker">Rethinking Solutions</p>
+          <h2>Why Simple AI Is <strong>Not Enough</strong></h2>
+          <p class="section-lede">
+            Extraction, LLMs, and RAG help read data, but they are insufficient for true
+            harmonization across government institutions.
+          </p>
         </div>
         <div class="comparison-row reveal">
           <article>
-            <div class="mini-icon">Ex</div>
+            <div class="mini-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <path d="m7 10 5 5 5-5" />
+                <path d="M12 15V3" />
+              </svg>
+            </div>
             <h3>Extraction</h3>
             <p>Captures data, but not relationships.</p>
           </article>
           <article>
-            <div class="mini-icon">LL</div>
+            <div class="mini-icon purple">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-5 .44 2.5 2.5 0 0 1-3-3.08 3 3 0 0 1-.3-5.58A2.5 2.5 0 0 1 5 7a2.5 2.5 0 0 1 2-3A2.5 2.5 0 0 1 9.5 2Z"
+                />
+                <path
+                  d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 5 .44 2.5 2.5 0 0 0 3-3.08 3 3 0 0 0 .3-5.58A2.5 2.5 0 0 0 19 7a2.5 2.5 0 0 0-2-3 2.5 2.5 0 0 0-2.5-2Z"
+                />
+              </svg>
+            </div>
             <h3>LLM</h3>
             <p>Explains data, but lacks consistency.</p>
           </article>
           <article>
-            <div class="mini-icon">Rg</div>
+            <div class="mini-icon cyan">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+            </div>
             <h3>RAG</h3>
             <p>Retrieves data, but does not resolve conflicts.</p>
           </article>
@@ -112,46 +248,62 @@
 
       <section class="section platform" id="platform">
         <div class="platform-map reveal" aria-hidden="true">
-          <div class="map-node source">Sources</div>
-          <div class="map-node metadata">Metadata</div>
-          <div class="map-node meaning">Meaning</div>
-          <div class="map-node review">Review</div>
-          <div class="map-core">
-            <span>Metagraph</span>
-          </div>
-          <svg viewBox="0 0 720 500" role="img" aria-label="Data harmonization flow map">
-            <defs>
-              <linearGradient id="map-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#22D3EE" />
-                <stop offset="38%" stop-color="#3B82F6" />
-                <stop offset="70%" stop-color="#A855F7" />
-                <stop offset="100%" stop-color="#EC4899" />
-              </linearGradient>
-            </defs>
-            <path d="M78 116 C220 44 275 190 360 250" />
-            <path d="M620 118 C488 66 440 198 360 250" />
-            <path d="M92 382 C214 450 260 314 360 250" />
-            <path d="M612 390 C498 426 440 310 360 250" />
-            <path class="accent" d="M120 250 C238 230 282 250 360 250 C452 250 500 268 604 250" />
-          </svg>
+          <img
+            class="platform-map-image"
+            src="hexagonal architecture.png"
+            alt="Hexagonal architecture diagram"
+          />
         </div>
         <div class="platform-copy reveal">
-          <p class="kicker">Built for data harmonization</p>
-          <h2><strong>Align meaning</strong> across data, not just <em>extract information</em>.</h2>
+          <p class="kicker">Harmonization needs</p>
+          <h2>What Harmonization <strong>Actually Needs</strong></h2>
+          <p class="section-lede">
+            A system that builds context, reasons through conflicts, and supports accountable
+            decisions.
+          </p>
           <div class="feature-list">
             <article>
+              <div class="svg-icon small">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 7h16M4 12h16M4 17h10" />
+                  <path d="M6 5v14" />
+                </svg>
+              </div>
               <h3>Structured Extraction</h3>
               <p>Turn documents into usable metadata.</p>
             </article>
             <article>
+              <div class="svg-icon small purple">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="6" cy="12" r="3" />
+                  <circle cx="18" cy="6" r="3" />
+                  <circle cx="18" cy="18" r="3" />
+                  <path d="m8.6 10.6 6.8-3.2M8.6 13.4l6.8 3.2" />
+                </svg>
+              </div>
               <h3>Semantic Context</h3>
               <p>Understand relationships between indicators and datasets.</p>
             </article>
             <article>
+              <div class="svg-icon small cyan">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v18M3 12h18" />
+                  <path d="M6 6h4v4H6zM14 14h4v4h-4z" />
+                </svg>
+              </div>
               <h3>Intelligent Reasoning</h3>
               <p>Detect conflicts, overlaps, and inconsistencies.</p>
             </article>
             <article>
+              <div class="svg-icon small green">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+                  />
+                  <path d="M8 2h8v4H8z" />
+                  <path d="m9 14 2 2 4-4" />
+                </svg>
+              </div>
               <h3>Human Validation</h3>
               <p>Keep decisions auditable and accountable.</p>
             </article>
@@ -161,8 +313,12 @@
 
       <section class="section workflow" id="workflow">
         <div class="section-copy reveal">
-          <p class="kicker">From resources to decisions</p>
-          <h2>A clear path from <em>scattered assets</em> to <strong>validated alignment</strong>.</h2>
+          <p class="kicker">Proposed solution</p>
+          <h2>From <strong>Documents</strong> to <strong>Decisions</strong></h2>
+          <p class="section-lede">
+            Metagraph integrates extraction, knowledge structure, reasoning, and human validation in
+            one workflow.
+          </p>
         </div>
         <ol class="timeline reveal">
           <li>
@@ -190,42 +346,86 @@
 
       <section class="section integration">
         <div class="integration-panel reveal">
-          <div>
-            <p class="kicker">Designed for integration</p>
-            <h2><strong>Modular architecture</strong> for existing public data ecosystems.</h2>
+          <div class="video-shell" aria-hidden="true">
+            <video
+              id="bg-video"
+              class="bg-video"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="metadata"
+            ></video>
+            <div class="video-overlay"></div>
           </div>
-          <ul class="check-list">
+          <div class="integration-copy">
+            <p class="kicker">Designed for integration</p>
+            <h2>
+              <span><strong>Modular Architecture</strong></span>
+              <span>for Existing Public</span>
+              <span>Data Ecosystems</span>
+            </h2>
+            <p class="section-lede">
+              Separate core logic from external systems, so institutions can connect without
+              replacing existing infrastructure.
+            </p>
+            <p class="integration-note">No need to replace existing systems.</p>
+          </div>
+          <ul class="check-list" aria-label="Integration capabilities">
             <li>Connect to existing databases, APIs, and documents</li>
             <li>Extend with custom scripts or connectors</li>
             <li>Adapt to different institutional workflows</li>
           </ul>
-          <p class="quote">No need to replace existing systems.</p>
         </div>
       </section>
 
       <section class="section impact" id="impact">
         <div class="section-copy centered reveal">
           <p class="kicker">Expected impact</p>
-          <h2><strong>Faster review.</strong> Consistent definitions. <em>Accountable decisions.</em></h2>
+          <h2>Expected <strong>Impact</strong></h2>
+          <p class="section-lede">
+            Accelerating harmonization, improving metadata consistency, and strengthening decision
+            accountability.
+          </p>
         </div>
         <div class="impact-grid reveal">
           <article>
-            <span></span>
+            <div class="svg-icon amber">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z" />
+              </svg>
+            </div>
             <h3>Faster Review</h3>
             <p>Reduce manual effort in comparing metadata.</p>
           </article>
           <article>
-            <span></span>
+            <div class="svg-icon warning">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="12" r="5" />
+                <circle cx="12" cy="12" r="1" />
+              </svg>
+            </div>
             <h3>Consistent Definitions</h3>
             <p>Align indicators across institutions.</p>
           </article>
           <article>
-            <span></span>
+            <div class="svg-icon purple">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7L12 5" />
+                <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7L12 19" />
+              </svg>
+            </div>
             <h3>Interoperability Ready</h3>
             <p>Prepare data for cross-system integration.</p>
           </article>
           <article>
-            <span></span>
+            <div class="svg-icon cyan">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 11 12 14 22 4" />
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+              </svg>
+            </div>
             <h3>Accountable Decisions</h3>
             <p>Every step is traceable and auditable.</p>
           </article>
@@ -233,7 +433,7 @@
       </section>
 
       <section class="section final-cta" id="contact">
-        <div class="reveal">
+        <div class="reveal is-visible">
           <p class="kicker">Align data. Strengthen decisions.</p>
           <h2>Give every institution a <strong>shared language</strong> for data.</h2>
           <a class="button button-primary" href="mailto:hello@metagraph.ai">Start a conversation</a>
@@ -241,6 +441,6 @@
       </section>
     </main>
 
-    <script src="script.js"></script>
+    <script defer src="script.js"></script>
   </body>
 </html>

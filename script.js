@@ -1,154 +1,206 @@
-const canvas = document.getElementById("flow-canvas");
-const ctx = canvas.getContext("2d");
+const threeCanvas = document.getElementById("three-canvas");
+const bgVideo = document.getElementById("bg-video");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const videoSource = "https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8";
 
-let width = 0;
-let height = 0;
-let streams = [];
-let nodes = [];
-let rafId = 0;
+let bgHls = null;
+let threeRafId = 0;
+let renderer = null;
 
-function resizeCanvas() {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = Math.floor(width * dpr);
-  canvas.height = Math.floor(height * dpr);
-  canvas.style.width = `${width}px`;
-  canvas.style.height = `${height}px`;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  buildFlowField();
-}
+function initBackgroundVideo() {
+  if (!bgVideo) return;
 
-function buildFlowField() {
-  const streamCount = width < 720 ? 42 : 74;
-  const nodeCount = width < 720 ? 42 : 78;
-  const centerX = width * 0.5;
-  const centerY = height * 0.52;
+  if (bgVideo.canPlayType("application/vnd.apple.mpegurl")) {
+    bgVideo.src = videoSource;
+  } else if (window.Hls && window.Hls.isSupported()) {
+    bgHls = new window.Hls({
+      autoStartLoad: true,
+      enableWorker: true,
+    });
+    bgHls.loadSource(videoSource);
+    bgHls.attachMedia(bgVideo);
+  }
 
-  streams = Array.from({ length: streamCount }, (_, index) => {
-    const side = index % 2 === 0 ? -1 : 1;
-    const sourceY = height * (0.24 + Math.random() * 0.58);
-    const targetY = height * (0.2 + Math.random() * 0.6);
-    const sourceX = side < 0 ? -80 : width + 80;
-    const targetX = side < 0 ? width + 80 : -80;
-    const midY = centerY + (Math.random() - 0.5) * height * 0.16;
-    const color = index % 3 === 0 ? "#22D3EE" : index % 3 === 1 ? "#3B82F6" : "#EC4899";
-
-    return {
-      color,
-      progress: Math.random(),
-      speed: 0.00045 + Math.random() * 0.0007,
-      lineWidth: 0.35 + Math.random() * 0.9,
-      points: [
-        { x: sourceX, y: sourceY },
-        { x: centerX - side * width * (0.18 + Math.random() * 0.12), y: midY - 70 + Math.random() * 140 },
-        { x: centerX + side * width * (0.09 + Math.random() * 0.12), y: midY + 70 - Math.random() * 140 },
-        { x: targetX, y: targetY },
-      ],
-    };
-  });
-
-  nodes = Array.from({ length: nodeCount }, () => ({
-    x: Math.random() * width,
-    y: Math.random() * height,
-    r: 1 + Math.random() * 2.4,
-    alpha: 0.2 + Math.random() * 0.55,
-    color: Math.random() > 0.72 ? "#EC4899" : "#22D3EE",
-  }));
-}
-
-function cubicPoint(points, t) {
-  const mt = 1 - t;
-  const mt2 = mt * mt;
-  const t2 = t * t;
-  return {
-    x: mt2 * mt * points[0].x + 3 * mt2 * t * points[1].x + 3 * mt * t2 * points[2].x + t2 * t * points[3].x,
-    y: mt2 * mt * points[0].y + 3 * mt2 * t * points[1].y + 3 * mt * t2 * points[2].y + t2 * t * points[3].y,
-  };
-}
-
-function drawStream(stream) {
-  ctx.beginPath();
-  stream.points.forEach((point, index) => {
-    if (index === 0) {
-      ctx.moveTo(point.x, point.y);
-    } else if (index === 1) {
-      ctx.bezierCurveTo(stream.points[1].x, stream.points[1].y, stream.points[2].x, stream.points[2].y, stream.points[3].x, stream.points[3].y);
-    }
-  });
-  ctx.strokeStyle = stream.color;
-  ctx.globalAlpha = 0.1;
-  ctx.lineWidth = stream.lineWidth;
-  ctx.stroke();
-
-  const head = cubicPoint(stream.points, stream.progress);
-  const tail = cubicPoint(stream.points, Math.max(0, stream.progress - 0.09));
-  const gradient = ctx.createLinearGradient(tail.x, tail.y, head.x, head.y);
-  gradient.addColorStop(0, "rgba(34, 211, 238, 0)");
-  gradient.addColorStop(0.5, stream.color);
-  gradient.addColorStop(1, "rgba(255, 255, 255, 0.95)");
-
-  ctx.beginPath();
-  ctx.moveTo(tail.x, tail.y);
-  ctx.lineTo(head.x, head.y);
-  ctx.strokeStyle = gradient;
-  ctx.globalAlpha = 0.72;
-  ctx.lineWidth = stream.lineWidth + 0.35;
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(head.x, head.y, 1.4 + stream.lineWidth, 0, Math.PI * 2);
-  ctx.fillStyle = stream.color;
-  ctx.globalAlpha = 0.9;
-  ctx.fill();
-}
-
-function drawNodes(time) {
-  nodes.forEach((node, index) => {
-    const pulse = Math.sin(time * 0.0012 + index) * 0.25 + 0.75;
-    ctx.beginPath();
-    ctx.arc(node.x, node.y, node.r * pulse, 0, Math.PI * 2);
-    ctx.fillStyle = node.color;
-    ctx.globalAlpha = node.alpha * pulse;
-    ctx.fill();
-  });
-}
-
-function animate(time = 0) {
-  ctx.clearRect(0, 0, width, height);
-  ctx.globalCompositeOperation = "lighter";
-  streams.forEach((stream) => {
-    drawStream(stream);
-    if (!reduceMotion) {
-      stream.progress += stream.speed;
-      if (stream.progress > 1.08) stream.progress = -0.08;
-    }
-  });
-  drawNodes(time);
-  ctx.globalCompositeOperation = "source-over";
-
-  if (!reduceMotion) {
-    rafId = requestAnimationFrame(animate);
+  const playPromise = bgVideo.play();
+  if (playPromise && typeof playPromise.catch === "function") {
+    playPromise.catch(() => {});
   }
 }
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
+function initThreeField() {
+  if (!threeCanvas || !window.THREE) return;
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x000000, 0.02);
+
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const particleCount = window.innerWidth < 720 ? 520 : 800;
+  const positions = new Float32Array(particleCount * 3);
+  const colors = new Float32Array(particleCount * 3);
+  const baseY = new Float32Array(particleCount);
+  const color1 = new THREE.Color(0x3b82f6);
+  const color2 = new THREE.Color(0x22d3ee);
+
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas: threeCanvas, alpha: true, antialias: true });
+  } catch {
+    threeCanvas.remove();
+    return;
+  }
+
+  for (let index = 0; index < particleCount; index += 1) {
+    const i3 = index * 3;
+    positions[i3] = (Math.random() - 0.5) * 20;
+    positions[i3 + 1] = (Math.random() - 0.5) * 20;
+    positions[i3 + 2] = (Math.random() - 0.5) * 10;
+    baseY[index] = positions[i3 + 1];
+
+    const mixedColor = color1.clone().lerp(color2, Math.random());
+    colors[i3] = mixedColor.r;
+    colors[i3 + 1] = mixedColor.g;
+    colors[i3 + 2] = mixedColor.b;
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+  const material = new THREE.PointsMaterial({
+    size: 0.05,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending,
+    sizeAttenuation: true,
+    depthWrite: false,
+  });
+
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+  camera.position.z = 5;
+
+  const mouse = new THREE.Vector2();
+  const targetMouse = new THREE.Vector2();
+  const particlePositions = geometry.attributes.position.array;
+
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      targetMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      targetMouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    },
+    { passive: true }
+  );
+
+  function resizeThree() {
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight, false);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  }
+
+  function animateThree(time = 0) {
+    const t = time * 0.001;
+
+    mouse.x += (targetMouse.x - mouse.x) * 0.05;
+    mouse.y += (targetMouse.y - mouse.y) * 0.05;
+
+    particles.rotation.y = t * 0.3;
+    particles.rotation.x = reduceMotion ? 0.1 : Math.sin(t * 0.5) * 0.2;
+
+    if (!reduceMotion) {
+      for (let index = 0; index < particleCount; index += 1) {
+        const i3 = index * 3;
+        particlePositions[i3 + 1] = baseY[index] + Math.sin(t * 2 + index * 0.1) * 0.35;
       }
+      geometry.attributes.position.needsUpdate = true;
+    }
+
+    camera.position.x = mouse.x * 0.5;
+    camera.position.y = mouse.y * 0.5;
+    camera.lookAt(scene.position);
+
+    renderer.render(scene, camera);
+
+    if (!reduceMotion) {
+      threeRafId = requestAnimationFrame(animateThree);
+    }
+  }
+
+  window.addEventListener("resize", resizeThree, { passive: true });
+  resizeThree();
+  animateThree();
+}
+
+function initRevealMotion() {
+  if (window.gsap && window.ScrollTrigger && !reduceMotion) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.set(".reveal", { opacity: 0, y: 32 });
+    gsap.set(".hero-content", { opacity: 1, y: 0 });
+
+    gsap.from(".hero-content > *", {
+      y: 24,
+      duration: 0.85,
+      ease: "power3.out",
+      stagger: 0.12,
+      delay: 0.15,
     });
-  },
-  { threshold: 0.16 }
-);
 
-document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+    gsap.utils.toArray(".reveal:not(.hero-content)").forEach((element) => {
+      gsap.to(element, {
+        opacity: 1,
+        y: 0,
+        duration: 0.85,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: element,
+          start: "top 84%",
+          toggleActions: "play none none none",
+        },
+      });
+    });
 
-window.addEventListener("resize", resizeCanvas, { passive: true });
-resizeCanvas();
-animate();
+    gsap.utils.toArray(".section:not(.hero)").forEach((section) => {
+      gsap.fromTo(
+        section,
+        { "--section-glow": 0 },
+        {
+          "--section-glow": 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+    });
+    return;
+  }
 
-window.addEventListener("beforeunload", () => cancelAnimationFrame(rafId));
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.16 }
+  );
+
+  document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+}
+
+initBackgroundVideo();
+initThreeField();
+initRevealMotion();
+
+window.addEventListener("beforeunload", () => {
+  cancelAnimationFrame(threeRafId);
+  if (renderer) renderer.dispose();
+  if (bgHls) bgHls.destroy();
+});
