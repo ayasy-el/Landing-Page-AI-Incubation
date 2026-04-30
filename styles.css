@@ -36,7 +36,14 @@ body {
     radial-gradient(circle at 85% 38%, rgba(168, 85, 247, 0.11), transparent 24rem),
     linear-gradient(180deg, #05070b 0%, #08101d 45%, #05070b 100%);
   color: var(--text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   letter-spacing: 0;
   overflow-x: hidden;
 }
@@ -108,9 +115,27 @@ main::after {
 
 main::before {
   background:
-    radial-gradient(ellipse at 50% 180px, rgba(5, 7, 11, 0.18), rgba(5, 7, 11, 0.84) 34%, rgba(5, 7, 11, 0.96) 100%),
-    linear-gradient(180deg, transparent 0, rgba(5, 7, 11, 0.12) 90px, rgba(5, 7, 11, 0.68) 240px, rgba(0, 0, 0, 0.92) 520px, rgba(0, 0, 0, 0.94) 100%);
-  mask-image: linear-gradient(180deg, transparent 0, rgba(0, 0, 0, 0.08) 48px, rgba(0, 0, 0, 0.48) 150px, #000 320px);
+    radial-gradient(
+      ellipse at 50% 180px,
+      rgba(5, 7, 11, 0.18),
+      rgba(5, 7, 11, 0.84) 34%,
+      rgba(5, 7, 11, 0.96) 100%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0,
+      rgba(5, 7, 11, 0.12) 90px,
+      rgba(5, 7, 11, 0.68) 240px,
+      rgba(0, 0, 0, 0.92) 520px,
+      rgba(0, 0, 0, 0.94) 100%
+    );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0,
+    rgba(0, 0, 0, 0.08) 48px,
+    rgba(0, 0, 0, 0.48) 150px,
+    #000 320px
+  );
 }
 
 main::after {
@@ -119,8 +144,14 @@ main::after {
     radial-gradient(circle, rgba(34, 211, 238, 0.2) 0 1px, transparent 1.4px),
     radial-gradient(circle, rgba(255, 255, 255, 0.12) 0 0.7px, transparent 1.2px),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.32'/%3E%3C/svg%3E");
-  background-position: 0 0, 14px 18px, 0 0;
-  background-size: 28px 28px, 56px 56px, 220px 220px;
+  background-position:
+    0 0,
+    14px 18px,
+    0 0;
+  background-size:
+    28px 28px,
+    56px 56px,
+    220px 220px;
   mix-blend-mode: screen;
   mask-image: linear-gradient(180deg, transparent 0, rgba(0, 0, 0, 0.18) 120px, #000 320px);
 }
@@ -175,7 +206,10 @@ main::after {
 
 .nav-links a,
 .nav-cta {
-  transition: color 180ms ease, border-color 180ms ease, transform 180ms ease;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
 }
 
 .nav-links a:hover {
@@ -268,7 +302,12 @@ main::after {
   left: -180px;
   width: 360px;
   height: 240px;
-  background: radial-gradient(circle, rgba(193, 168, 255, 0.62) 0%, rgba(122, 92, 255, 0.18) 42%, transparent 74%);
+  background: radial-gradient(
+    circle,
+    rgba(193, 168, 255, 0.62) 0%,
+    rgba(122, 92, 255, 0.18) 42%,
+    transparent 74%
+  );
   transform: rotate(-18deg);
 }
 
@@ -277,7 +316,12 @@ main::after {
   right: -180px;
   width: 360px;
   height: 320px;
-  background: radial-gradient(circle, rgba(92, 84, 255, 0.32) 0%, rgba(92, 84, 255, 0.1) 38%, transparent 74%);
+  background: radial-gradient(
+    circle,
+    rgba(92, 84, 255, 0.32) 0%,
+    rgba(92, 84, 255, 0.1) 38%,
+    transparent 74%
+  );
 }
 
 .hero-content {
@@ -429,7 +473,12 @@ h3 {
   inset: auto 10% 0;
   height: 96px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(145, 114, 255, 0.62) 0%, rgba(145, 114, 255, 0.18) 44%, transparent 74%);
+  background: radial-gradient(
+    circle,
+    rgba(145, 114, 255, 0.62) 0%,
+    rgba(145, 114, 255, 0.18) 44%,
+    transparent 74%
+  );
   filter: blur(26px);
   content: "";
 }
@@ -439,7 +488,12 @@ h3 {
   inset: 4% 10% auto;
   height: 120px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(205, 191, 255, 0.26) 0%, rgba(128, 98, 255, 0.16) 42%, transparent 78%);
+  background: radial-gradient(
+    circle,
+    rgba(205, 191, 255, 0.26) 0%,
+    rgba(128, 98, 255, 0.16) 42%,
+    transparent 78%
+  );
   filter: blur(26px);
   pointer-events: none;
 }
@@ -450,8 +504,7 @@ h3 {
   border: 1px solid rgba(171, 153, 255, 0.22);
   border-radius: 22px;
   background:
-    linear-gradient(180deg, rgba(17, 17, 32, 0.92), rgba(8, 9, 18, 0.96)),
-    rgba(9, 10, 20, 0.86);
+    linear-gradient(180deg, rgba(17, 17, 32, 0.92), rgba(8, 9, 18, 0.96)), rgba(9, 10, 20, 0.86);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     0 0 0 1px rgba(255, 255, 255, 0.03),
@@ -464,7 +517,13 @@ h3 {
   inset: 0;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 18%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.02));
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.02),
+      transparent 18%,
+      transparent 82%,
+      rgba(255, 255, 255, 0.02)
+    );
   pointer-events: none;
   content: "";
 }
@@ -476,7 +535,12 @@ h3 {
   bottom: -2px;
   height: 20px;
   border-radius: 999px;
-  background: linear-gradient(90deg, rgba(109, 76, 255, 0), rgba(172, 144, 255, 0.8), rgba(109, 76, 255, 0));
+  background: linear-gradient(
+    90deg,
+    rgba(109, 76, 255, 0),
+    rgba(172, 144, 255, 0.8),
+    rgba(109, 76, 255, 0)
+  );
   filter: blur(10px);
   pointer-events: none;
   content: "";
@@ -498,7 +562,10 @@ h3 {
   border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 800;
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
 }
 
 .button:hover {
@@ -551,7 +618,9 @@ h3 {
 }
 
 .data-arch::before {
-  box-shadow: inset 0 36px 42px rgba(34, 211, 238, 0.12), 0 -8px 60px rgba(168, 85, 247, 0.3);
+  box-shadow:
+    inset 0 36px 42px rgba(34, 211, 238, 0.12),
+    0 -8px 60px rgba(168, 85, 247, 0.3);
 }
 
 .data-arch::after {
@@ -638,7 +707,10 @@ h3 {
 .signal-card {
   min-height: 246px;
   padding: 22px;
-  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
 }
 
 .signal-card:hover,
@@ -905,7 +977,10 @@ h3 {
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     0 24px 70px rgba(0, 0, 0, 0.26);
   overflow: hidden;
-  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
 }
 
 .bento-card:hover {
@@ -953,8 +1028,7 @@ h3 {
   overflow: hidden;
   border-radius: 16px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
-    rgba(7, 10, 18, 0.88);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent), rgba(7, 10, 18, 0.88);
 }
 
 .bento-media::after {
@@ -962,7 +1036,13 @@ h3 {
   inset: 0;
   background:
     linear-gradient(180deg, rgba(7, 10, 18, 0) 52%, rgba(7, 10, 18, 0.58) 100%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04), transparent 24%, transparent 76%, rgba(255, 255, 255, 0.03));
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04),
+      transparent 24%,
+      transparent 76%,
+      rgba(255, 255, 255, 0.03)
+    );
   pointer-events: none;
   content: "";
 }
@@ -1108,7 +1188,12 @@ h3 {
   left: 0;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, rgba(34, 211, 238, 0.65), rgba(168, 85, 247, 0.38), transparent);
+  background: linear-gradient(
+    90deg,
+    rgba(34, 211, 238, 0.65),
+    rgba(168, 85, 247, 0.38),
+    transparent
+  );
   opacity: 0.5;
   transition: opacity 220ms ease;
   content: "";
@@ -1143,13 +1228,17 @@ h3 {
   border-radius: 50%;
   opacity: 0;
   transform: scale(0.96);
-  transition: opacity 220ms ease, transform 220ms ease;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
   content: "";
 }
 
 .timeline li p {
   max-width: 170px;
-  transition: transform 220ms ease, color 220ms ease;
+  transition:
+    transform 220ms ease,
+    color 220ms ease;
 }
 
 .timeline li:hover {
@@ -1303,7 +1392,10 @@ h3 {
 .impact-grid article {
   min-height: 220px;
   padding: 22px;
-  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
 }
 
 .impact-grid span {
@@ -1328,7 +1420,9 @@ h3 {
 .reveal {
   opacity: 0;
   transform: translateY(26px);
-  transition: opacity 700ms ease, transform 700ms ease;
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
 }
 
 .reveal.is-visible {
